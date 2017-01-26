@@ -49,7 +49,7 @@ public class BKMaxClique {
 
 			// Try again recursively for each vertex in P\neighbors
 			for (int idx = 0; idx < PMinusNeighbors.size(); idx++) {
-				int testVertex = PMinusNeighbors.get(idx);
+				int testVertex = PMinusNeighbors.getQuick(idx);
 
 				// Add testVertex to R
 				TIntArrayList newR = new TIntArrayList(R);
@@ -85,7 +85,7 @@ public class BKMaxClique {
 	public static TIntArrayList removeVertices(TIntArrayList P, TIntArrayList neighbors) {
 		TIntArrayList output = new TIntArrayList(P);
 		for (int idx = 0; idx < neighbors.size(); idx++) {
-			int v = neighbors.get(idx);
+			int v = neighbors.getQuick(idx);
 			output.remove(v);
 		}
 		return (output);
@@ -95,7 +95,7 @@ public class BKMaxClique {
 	public static TIntArrayList intersectVertices(TIntArrayList one, TIntArrayList two) {
 		TIntArrayList output = new TIntArrayList();
 		for (int idx = 0; idx < one.size(); idx++) {
-			int vertex = one.get(idx);
+			int vertex = one.getQuick(idx);
 			if (two.contains(vertex)) {
 				output.add(vertex);
 			}

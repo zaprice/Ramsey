@@ -1,5 +1,6 @@
 package ramsey;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 
 import gnu.trove.list.array.TIntArrayList;
@@ -11,6 +12,8 @@ public class Graph {
 	private int n;
 	// Maximum size of BitSet, because of how byte[] transform works
 	private final int maxLen = 32;
+	private int[] degrees;
+	private ArrayList<TIntArrayList> neighbors;
 
 	/*
 	 * Constructor
@@ -19,6 +22,13 @@ public class Graph {
 	public Graph(int s, int n) {
 		graph = toBits(s);
 		this.n = n;
+		degrees = new int[n];
+		neighbors = new ArrayList<TIntArrayList>(n);
+		for (int i = 0; i < n; i++) {
+			degrees[i] = computeDegree(i);
+			neighbors.add(i, computeNeighbors(i));
+		}
+
 	}
 
 	/*
@@ -27,28 +37,12 @@ public class Graph {
 
 	// Get degree of vertex i
 	public int degree(int i) {
-		int degree = 0;
-		for (int j = 0; j < n; j++) {
-			if (j == i) {
-				continue;
-			} else if (isConnected(i, j)) {
-				degree++;
-			}
-		}
-		return (degree);
+		return (degrees[i]);
 	}
 
 	// Get list of neighbors of vertex i
 	public TIntArrayList neighbors(int i) {
-		TIntArrayList neighbors = new TIntArrayList();
-		for (int j = 0; j < n; j++) {
-			if (j == i) {
-				continue;
-			} else if (isConnected(i, j)) {
-				neighbors.add(j);
-			}
-		}
-		return (neighbors);
+		return (neighbors.get(i));
 	}
 
 	public int getn() {
@@ -75,6 +69,30 @@ public class Graph {
 			// Vertices are listed backwards, from 0 to maxLen-1
 			return (graph.get(maxLen - 1 - linearIndex));
 		}
+	}
+
+	private int computeDegree(int i) {
+		int degree = 0;
+		for (int j = 0; j < n; j++) {
+			if (j == i) {
+				continue;
+			} else if (isConnected(i, j)) {
+				degree++;
+			}
+		}
+		return (degree);
+	}
+
+	private TIntArrayList computeNeighbors(int i) {
+		TIntArrayList neighbors = new TIntArrayList();
+		for (int j = 0; j < n; j++) {
+			if (j == i) {
+				continue;
+			} else if (isConnected(i, j)) {
+				neighbors.add(j);
+			}
+		}
+		return (neighbors);
 	}
 
 	/*
